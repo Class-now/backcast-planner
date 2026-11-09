@@ -10,4 +10,4 @@ javascript, html5, css3, github-pages, localstorage, icalendar, node.js, playwri
 
 - Demo: https://class-now.github.io/backcast-planner/
 - Source: https://github.com/Class-now/backcast-planner
-- Video: submission/demo.mp4 (76 s, silent with English captions; transcript in transcript.md)
+- Video: submission/demo.mp4 (73 s, silent with English captions; transcript in transcript.md)

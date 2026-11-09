@@ -1,6 +1,6 @@
 # Backcast — plan backwards from every deadline
 
-**Live demo:** https://class-now.github.io/backcast-planner/ · **Video (76 s):** see `submission/demo.mp4` / the Devpost page · **License:** MIT
+**Live demo:** https://class-now.github.io/backcast-planner/ · **Video (73 s):** see `submission/demo.mp4` / the Devpost page · **License:** MIT
 
 Paste the deadlines from your syllabi. Backcast reads them (English or Japanese dates), sizes each one by type, plans the work **backwards** from each deadline into the days before it, and shows a workload heatmap that flags **crunch collisions** — days where more work is due than you have hours for — with one-click fixes. Export the plan to your calendar (.ics) or print it as a checklist.
 
