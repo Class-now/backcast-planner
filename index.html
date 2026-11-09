@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Backcast — plan backwards from every deadline</title>
+  <meta name="description" content="Paste the deadlines from your syllabi. Backcast sizes each one, plans the work backwards into the days before it, and flags crunch collisions before they happen. Runs entirely in your browser.">
+  <meta name="theme-color" content="#0d366b">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#plan">Skip to your plan</a>
+  <header class="site">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0d366b"/><path d="M7 22h4v-5H7zm6 0h4v-9h-4zm6 0h4V9h-4z" fill="#86b6ef"/><circle cx="25" cy="7" r="2" fill="#fff"/></svg>
+      <div>
+        <h1>Backcast</h1>
+        <p class="tagline">Paste your syllabus deadlines. Get a plan that works backwards from each one — and see crunch weeks before they hit.</p>
+      </div>
+    </div>
+    <p class="privacy"><span aria-hidden="true">🔒</span> Runs in your browser. No account, nothing uploaded.</p>
+  </header>
+
+  <main class="layout">
+    <div class="inputs">
+      <section class="card" aria-labelledby="s1">
+        <h2 id="s1"><span class="step" aria-hidden="true">1</span> Paste your deadlines</h2>
+        <p class="hint">One per line, straight from your syllabus. Works with <code>Nov 28</code>, <code>12/3</code>, <code>2026-12-03</code> and <code>11月28日</code>. Lines like <code>PSYC 101:</code> or <code>## 日本語 III</code> set the course for the lines below.</p>
+        <label for="paste" class="sr-only">Deadlines text</label>
+        <textarea id="paste" rows="9" spellcheck="false" placeholder="PSYC 101 — Intro to Psychology&#10;Essay 2 due Nov 28 (2,000 words)&#10;Midterm 12/3&#10;レポート 11月30日 2000字"></textarea>
+        <div class="row">
+          <button id="parse" class="primary" type="button">Plan these deadlines</button>
+          <button id="example" type="button">Load an example</button>
+          <label class="check"><input type="checkbox" id="dayfirst"> Dates are day/month</label>
+        </div>
+        <p id="parse-status" class="status" role="status" aria-live="polite"></p>
+        <details id="skipped" hidden>
+          <summary>Lines without a date</summary>
+          <ul id="skipped-list"></ul>
+        </details>
+      </section>
+
+      <section class="card" aria-labelledby="s2">
+        <h2 id="s2"><span class="step" aria-hidden="true">2</span> Check the sizes</h2>
+        <p class="hint">Hours are a first guess from the type and any length in the line (words, 字, pages, minutes). Change anything — the plan updates as you type.</p>
+        <div id="tasks" class="tasks"></div>
+        <p id="no-tasks" class="empty">No deadlines yet. Paste some above or load the example.</p>
+        <button id="add-task" type="button" class="ghost">+ Add a deadline by hand</button>
+      </section>
+
+      <section class="card" aria-labelledby="s3">
+        <h2 id="s3"><span class="step" aria-hidden="true">3</span> Your week</h2>
+        <p class="hint">How many hours can you really study on each day? Use 0 for days off.</p>
+        <fieldset class="week">
+          <legend class="sr-only">Study hours per weekday</legend>
+          <div id="week" class="week-grid"></div>
+        </fieldset>
+        <div class="row">
+          <label for="session">Work in sessions of</label>
+          <select id="session">
+            <option value="0.5">30 min</option>
+            <option value="1" selected>1 hour</option>
+            <option value="1.5">1.5 hours</option>
+            <option value="2">2 hours</option>
+          </select>
+        </div>
+        <div id="overrides-box" hidden>
+          <h3>One-off changes</h3>
+          <ul id="overrides" class="overrides"></ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="plan" id="plan" tabindex="-1">
+      <section class="card" aria-labelledby="s4">
+        <div class="plan-head">
+          <h2 id="s4"><span class="step" aria-hidden="true">4</span> Your backcast</h2>
+          <div class="actions">
+            <button id="undo" type="button" disabled>Undo</button>
+            <button id="ics" type="button">Export .ics</button>
+            <button id="print" type="button">Print list</button>
+          </div>
+        </div>
+        <div id="stats" class="stats"></div>
+        <div class="heat-wrap">
+          <table id="heat" class="heat">
+            <caption>Daily workload. Darker means fuller; red with stripes means more work than hours available. Select a day for details. Arrow keys move between days.</caption>
+            <thead><tr><th scope="col" class="wk"><span class="sr-only">Week of</span></th><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th><th scope="col">Sat</th><th scope="col">Sun</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="legend" aria-hidden="true">
+            <span><i class="sw l0"></i>free</span>
+            <span><i class="sw l1"></i>light</span>
+            <span><i class="sw l2"></i>half</span>
+            <span><i class="sw l3"></i>busy</span>
+            <span><i class="sw l4"></i>full</span>
+            <span><i class="sw over"></i>over capacity</span>
+            <span><b class="due-dot">◆</b>deadline</span>
+          </div>
+        </div>
+        <div id="alerts" class="alerts" aria-live="polite"></div>
+        <div id="day" class="day"></div>
+      </section>
+
+      <section class="card" aria-labelledby="s5">
+        <h2 id="s5">Milestones by deadline</h2>
+        <ol id="timeline" class="timeline"></ol>
+      </section>
+
+      <section class="card printable" aria-labelledby="s6">
+        <h2 id="s6">Day-by-day list</h2>
+        <p class="print-only">Backcast study plan · printed <span id="printed"></span></p>
+        <div id="agenda" class="agenda"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site">
+    <p>Backcast keeps everything in this browser's local storage. <button id="reset" type="button" class="link">Clear all data</button></p>
+    <p><a href="https://github.com/Class-now/backcast-planner">Source on GitHub</a> · MIT license · Built for LaunchPad Hacks 2026</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

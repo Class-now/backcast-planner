@@ -1,0 +1,15 @@
+{
+  "name": "backcast-planner",
+  "version": "1.0.0",
+  "description": "Paste your syllabus deadlines; Backcast plans the work backwards and flags crunch collisions.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
+}
